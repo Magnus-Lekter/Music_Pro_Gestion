@@ -133,11 +133,12 @@ class Producto(db.Model):
     imagen = db.Column(db.String(250), nullable= False)
     descripcion = db.Column(db.String(250), nullable= False)
     precio = db.Column(db.Integer, nullable= False)
+    precio_dolar = db.Column(db.Integer, nullable= False)
     stock = db.Column(db.Integer, nullable= False, default=0)
     id_categoria = db.Column(db.Integer, db.ForeignKey('categoria.id_categoria'), nullable= False)
 
     def __str__(self):
-        return f"cod_producto: {self.cod_producto}, serie_producto: {self.serie_producto}, marca: {self.marca}, nombre: {self.nombre}, imagen: Base64img, descripcion: {self.descripcion}, precio: {self.precio}, stock: {self.stock}, id_categoria: {self.id_categoria}"
+        return f"cod_producto: {self.cod_producto}, serie_producto: {self.serie_producto}, marca: {self.marca}, nombre: {self.nombre}, imagen: Base64img, descripcion: {self.descripcion}, precio: {self.precio}, precio_dolar: {self.precio_dolar}, stock: {self.stock}, id_categoria: {self.id_categoria}"
     
     def serialize(self):
         return{
@@ -148,6 +149,7 @@ class Producto(db.Model):
             "imagen": self.imagen,
             "descripcion": self.descripcion,
             "precio": self.precio,
+            "precio_dolar": self.precio_dolar,
             "stock": self.stock,
             "id_categoria": self.id_categoria
             }
@@ -160,6 +162,7 @@ class Producto(db.Model):
             "imagen": 'data:image/jpeg;base64,'+base64.b64encode(self.imagen).decode('utf-8'),
             "descripcion": self.descripcion,
             "precio": self.precio,
+            "precio_dolar": self.precio_dolar,
             "stock": self.stock,
             "id_categoria": self.id_categoria,
             }
