@@ -1,11 +1,109 @@
+"""Modelos para la base de datos de MusicPro"""
 
-from datetime import datetime
+#pylint: disable=missing-docstring, missing-class-docstring, missing-function-docstring, no-member
+
+#from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import ForeignKey, String, Column
-from sqlalchemy.orm import relationship
+#from sqlalchemy import ForeignKey, String, Column
+#from sqlalchemy.orm import relationship
 db = SQLAlchemy()
 
 #Tablas que usaremos en el proyecto music Pro:
+
+class Usuario(db.Model):
+    __tablename__ = 'usuario'
+    rut = db.Column(db.Integer, primary_key=True)
+    nombres = db.Column(db.String(250), nullable= False)
+    apellidos = db.Column(db.String(250), nullable= False)
+    domicilio = db.Column(db.String(250), nullable= True)
+    id_comuna = db.Column(db.Integer, db.ForeignKey('comuna.id_comuna'), nullable= True)
+    fono = db.Column(db.Integer, nullable= True)
+    email = db.Column(db.String(250), nullable= False)
+    password = db.Column(db.String(250), nullable= False)
+    estado = db.Column(db.Integer, nullable= False)  #0: inactivo, 1: activo
+    tipo = db.Column(db.Integer, nullable= False) #1: cliente, 2: Vendedor, 3: Bodeguero, 4: Contador, 5: Administrador
+
+    def __str__(self):
+        return f"Rut Usuario: {self.rut}, Nombres: {self.nombres}, Apellidos: {self.apellidos}, Domicilio: {self.domicilio}, id comuna: {self.id_comuna}, fono: {self.fono}, email: {self.email}, estado: {self.estado}, id Privilegios: {self.tipo}"
+    def serialize(self):
+        return{
+            "Rut Usuario": self.rut,
+            "Nombres":self.nombres,
+            "Apellidos":self.apellidos,
+            "Domicilio":self.domicilio,
+            "id comuna": self.id_comuna,
+            "fono": self.fono,
+            "email": self.email,
+            "estado": self.estado,
+            "id Privilegios": self.tipo 
+        }
+    
+    
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+class Region(db.Model):
+    __tablename__ = 'region'
+    id_region = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(250), nullable= False)
+
+    def __str__(self):
+        return f"id_region: {self.id_region}, nombre Region: {self.nombre}"
+    
+    def serialize(self):
+        return{
+            "id_region": self.id_region,
+            "nombre": self.nombre,
+            }
+    
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+class Comuna(db.Model):
+    __tablename__ = 'comuna'
+    id_comuna = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(250), nullable= False)
+    id_region = db.Column(db.Integer, db.ForeignKey('region.id_region'), nullable= False)
+
+    def __str__(self):
+        return f"id_comuna: {self.id_comuna}, nombre Comuna: {self.nombre}, id Region: {self.id_region}"
+    
+    def serialize(self):
+        return{
+            "id_comuna": self.id_comuna,
+            "nombre": self.nombre,
+            "id Region": self.id_region
+            }
+    
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+
+
 """
 
 
@@ -22,64 +120,8 @@ db = SQLAlchemy()
 ]
 }
 """
-
-# Tabla Usuario/Cliente
-#Creación de tabla usuario
-class cliente(db.Model):
-    __tablename__ = 'cliente'
-    rut_cli = db.Column(db.Integer, primary_key=True)
-    nombres = db.Column(db.String(250), nullable= False)
-    apellidos = db.Column(db.String(250), nullable= False)
-    domicilio = db.Column(db.String(250), nullable= False)
-    id_comuna = db.Column(db.Integer, db.ForeignKey('comuna.id_comuna'))
-    fono = db.Column(db.Integer, nullable= False)
-    email = db.Column(db.String(250), nullable= False)
-    password = db.Column(db.String(250), nullable= True)
-    estado = db.Column(db.Integer, nullable= False)
-    
-
-    def __str__(self):
-        return "\nrut_cli: {}. nombres: {}. apellidos: {}. domicilio: {}. id comuna: {}. fono: {}. email: {}. password: {}. estado: {}. \n".format(
-            self.rut_cli,
-            self.nombres,
-            self.apellidos,
-            self.domicilio,
-            self.id_comuna,
-            self.fono,
-            self.email,
-            self.password,
-            self.estado
-            
-        )
-    def serialize(self):
-        return{
-            "Rut Cliente": self.rut_cli,
-            "Nombres":self.nombres,
-            "Apellidos":self.apellidos,
-            "Domicilio":self.domicilio,
-            "id comuna": self.id_comuna,
-            "fono": self.fono,
-            "email": self.email,
-            "password": self.password,
-            "estado": self.estado
-            
-        }
-    
-    
-    def save(self):
-        db.session.add(self)
-        db.session.commit()
-    
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
-
 ### desde aquí para abajo hay que modificar...
-
+"""
 #Creación de tabla empleado
 class empleado(db.Model):
     __tablename__ = 'empleado'
@@ -703,7 +745,7 @@ class Despacho (db.Model):
     
            
     def __str__(self):
-        return "\nID_vendedor: {}. rut: {}. dv: {}. primer_nombre: {}. segundo_nombre: {}. apellido_paterno: {}. apellido_materno: {}. direccion: {}. fono {}. correo: {}. estado: {}. comuna_id: {}.\n".format(
+        return "ID_vendedor: {}. rut: {}. dv: {}. primer_nombre: {}. segundo_nombre: {}. apellido_paterno: {}. apellido_materno: {}. direccion: {}. fono {}. correo: {}. estado: {}. comuna_id: {}.\n".format(
             self.id_despacho,
             self.direccion,
             self.fecha_entrega,
@@ -741,4 +783,4 @@ class Despacho (db.Model):
         db.session.delete(self)
         db.session.commit()
 
-
+"""
