@@ -4,22 +4,16 @@
 #from crypt import methods
 #import email
 #from os import access
+import os
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
-from sqlalchemy import desc
-from models import db, Usuario, Usuario_car, Region, Comuna, Descuento, Descuento_producto, Producto, Producto_carrito 
-from models import Provincias, Suscripcion, Donacion, Detalle, Venta, Vendedor, Despacho
-
 from flask_cors import CORS, cross_origin
-from logging import exception
-
-
-   
+from models import db, Region, Comuna, Categoria, Producto
     
 # 3. instanciamos la app
 app = Flask(__name__)
 cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Conten-Type'
+app.config['CORS_HEADERS'] = 'Content-Type'
 app.url_map.strict_slashes = False
 app.config['DEBUG'] = False
 app.config['ENV'] = 'development'
@@ -32,13 +26,148 @@ Migrate(app, db)
 
 # 5. Creamos la ruta por defecto para saber si mi app esta funcionado
 # 6. ejecutamos el comando en la consola: python app.py o python3 app.py y revisamos nuestro navegador
+@cross_origin()
 @app.route('/')
-#@app.jwt_required()
 def index():
-    return 'Hola desde gitpod'
+    """Bienvenida a la API de MusicPro"""
+    return 'MusicPro Api V 0.1'
 
-# 7. Ruta para consultar todos los Usuarios
-@app.route('/usuarios', methods=['GET'])
+########     CRUD para cada tabla   ########
+
+#### Region ####
+
+@cross_origin()
+@app.route('/regiones', methods=['GET'])
+def get_regiones():
+    """Ruta para consultar todas las regiones"""
+    regiones = Region.query.all()
+    regiones = list(map(lambda region: region.serialize(), regiones))
+    return jsonify(regiones), 200
+    
+@cross_origin()
+@app.route('/agregar-region', methods=['POST'])
+def agregar_region():
+    """Ruta para agregar una region"""
+    data = request.get_json()
+    region = Region()
+    region.nombre = data['nombre']
+    region.save()
+    return jsonify(region.serialize()), 201
+
+@cross_origin()
+@app.route('/regiones/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+def get_region(id):
+    """Ruta para consultar, actualizar y eliminar una region"""
+    region = Region.query.get(id)
+    if not region:
+        return jsonify({"msg": "Region no encontrada"}), 404
+    if request.method == 'GET':
+        return jsonify(region.serialize()), 200
+    if request.method == 'PUT':
+        data = request.get_json()
+        region.nombre = data['nombre']
+        region.update()
+        return jsonify(region.serialize()), 200
+    if request.method == 'DELETE':
+        region.delete()
+        return jsonify({"msg": "Region eliminada"}), 200
+    
+#### Comuna ####
+
+@cross_origin()
+@app.route('/comunas', methods=['GET'])
+def get_comunas():
+    """Ruta para consultar todas las comunas"""
+    comunas = Comuna.query.all()
+    comunas = list(map(lambda comuna: comuna.serialize(), comunas))
+    return jsonify(comunas), 200
+
+@cross_origin()
+@app.route('/agregar-comuna', methods=['POST'])
+def agregar_comuna():
+    """Ruta para agregar una comuna"""
+    data = request.get_json()
+    comuna = Comuna()
+    comuna.nombre = data['nombre']
+    comuna.region_id = data['region_id']
+    comuna.save()
+    return jsonify(comuna.serialize()), 201
+
+@cross_origin()
+@app.route('/comunas/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+def get_comuna(id):
+    """Ruta para consultar, actualizar y eliminar una comuna"""
+    comuna = Comuna.query.get(id)
+    if not comuna:
+        return jsonify({"msg": "Comuna no encontrada"}), 404
+    if request.method == 'GET':
+        return jsonify(comuna.serialize()), 200
+    if request.method == 'PUT':
+        data = request.get_json()
+        comuna.nombre = data['nombre']
+        comuna.region_id = data['region_id']
+        comuna.update()
+        return jsonify(comuna.serialize()), 200
+    if request.method == 'DELETE':
+        comuna.delete()
+        return jsonify({"msg": "Comuna eliminada"}), 200
+
+#### Categoria ####
+
+@cross_origin()
+@app.route('/categorias', methods=['GET'])
+def get_categorias():
+    """Ruta para consultar todas las categorias"""
+    categorias = Categoria.query.all()
+    categorias = list(map(lambda categoria: categoria.serialize(), categorias))
+    return jsonify(categorias), 200
+
+@cross_origin()
+@app.route('/agregar-categoria', methods=['POST'])
+def agregar_categoria():
+    """Ruta para agregar una categoria"""
+    data = request.get_json()
+    categoria = Categoria()
+    categoria.nombre = data['nombre']
+    categoria.save()
+    return jsonify(categoria.serialize()), 201
+
+@cross_origin()
+@app.route('/categorias/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+def get_categoria(id):
+    """Ruta para consultar, actualizar y eliminar una categoria"""
+    categoria = Categoria.query.get(id)
+    if not categoria:
+        return jsonify({"msg": "Categoria no encontrada"}), 404
+    if request.method == 'GET':
+        return jsonify(categoria.serialize()), 200
+    if request.method == 'PUT':
+        data = request.get_json()
+        categoria.nombre = data['nombre']
+        categoria.update()
+        return jsonify(categoria.serialize()), 200
+    if request.method == 'DELETE':
+        categoria.delete()
+        return jsonify({"msg": "Categoria eliminada"}), 200
+    
+#### Producto ####
+
+@cross_origin()
+@app.route('/productos', methods=['GET'])
+def get_productos():
+    """Ruta para consultar todos los productos"""
+    productos = Producto.query.all()
+    productos = list(map(lambda producto: producto.serialize(), productos))
+    #opcional con imagen
+    #productos = list(map(lambda producto: producto.serialize_with_image(), productos))
+    return jsonify(productos), 200
+
+
+
+
+
+
+"""@app.route('/usuarios', methods=['GET'])
 #@app.jwt_required()
 def getUsuarios():
     try:
@@ -911,7 +1040,7 @@ def getComunas():
 # 9. comando para migrar mis modelos:   flask db migrate
 # 10. comando para crear nuestros modelos como tablas : flask db upgrade
 # 11. comando para iniciar la app flask: flask run
-
+"""
 # 4. Configurar los puertos nuestra app 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
