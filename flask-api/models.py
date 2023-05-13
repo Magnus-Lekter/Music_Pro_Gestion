@@ -5,49 +5,64 @@ from sqlalchemy import ForeignKey, String, Column
 from sqlalchemy.orm import relationship
 db = SQLAlchemy()
 
+#Tablas que usaremos en el proyecto music Pro:
+"""
+
+
+{
+"Serie del producto": "EC-256",
+"marca": "LTD",
+"código": "LTD-4943",
+"nombre": "LTD-EC 256",
+"serie": [
+{
+"fecha": "2020-12-09T03:00:00.000Z",
+"valor": 290890.98
+}
+]
+}
+"""
+
 # Tabla Usuario/Cliente
 #Creación de tabla usuario
-class Usuario(db.Model):
-    __tablename__ = 'Usuario'
-    id = db.Column(db.Integer, primary_key=True)
-    correo = db.Column(db.String(250), nullable= False)
+class cliente(db.Model):
+    __tablename__ = 'cliente'
+    rut_cli = db.Column(db.Integer, primary_key=True)
+    nombres = db.Column(db.String(250), nullable= False)
+    apellidos = db.Column(db.String(250), nullable= False)
+    domicilio = db.Column(db.String(250), nullable= False)
+    id_comuna = db.Column(db.Integer, db.ForeignKey('comuna.id_comuna'))
+    fono = db.Column(db.Integer, nullable= False)
+    email = db.Column(db.String(250), nullable= False)
     password = db.Column(db.String(250), nullable= True)
     estado = db.Column(db.Integer, nullable= False)
-    primer_nombre = db.Column(db.String(250), nullable= False)
-    segundo_nombre = db.Column(db.String(250))
-    apellido_paterno = db.Column(db.String(250), nullable= False)
-    apellido_materno = db.Column(db.String(250))
-    direccion = db.Column(db.String(250), nullable= False)
-    comuna_id = db.Column(db.Integer, db.ForeignKey('Comuna.id_comuna'))
-    fono = db.Column(db.Integer, nullable= False)
+    
 
     def __str__(self):
-        return "\nID: {}. Correo {}. Password {}. Estado {}. Primer Nombre: {}. Segundo Nombre: {}. Apellido Paterno: {}. Apellido Materno: {}. Dirección: {}. comuna id: {}. Fono: {}\n".format(
-            self.id,
-            self.correo,
+        return "\nrut_cli: {}. nombres: {}. apellidos: {}. domicilio: {}. id comuna: {}. fono: {}. email: {}. password: {}. estado: {}. \n".format(
+            self.rut_cli,
+            self.nombres,
+            self.apellidos,
+            self.domicilio,
+            self.id_comuna,
+            self.fono,
+            self.email,
             self.password,
-            self.estado,
-            self.primer_nombre,
-            self.segundo_nombre,
-            self.apellido_paterno,
-            self.apellido_materno,
-            self.direccion,
-            self.comuna_id,
-            self.fono
+            self.estado
+            
         )
     def serialize(self):
         return{
-            "id": self.id,
-            "correo":self.correo,
-            "password":self.password,
-            "estado":self.estado,
-            "primer_nombre": self.primer_nombre,
-            "segundo_nombre": self.segundo_nombre,
-            "apellido_paterno": self.apellido_paterno,
-            "apellido_materno": self.apellido_materno,
-            "direccion": self.direccion,
-            "comuna": self.comuna_id,
-            "fono": self.fono
+            "Rut Cliente": self.rut_cli,
+            "Nombres":self.nombres,
+            "Apellidos":self.apellidos,
+            "Domicilio":self.domicilio,
+            "id comuna": self.id_comuna,
+            "fono": self.fono,
+            "email": self.email,
+            "password": self.password,
+            "estado": self.estado
+            
         }
     
     
@@ -62,20 +77,24 @@ class Usuario(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-#Creación de tabla usuario-Carrito
-class Usuario_car(db.Model):
-    __tablename__ = 'Usuario_car'
-    id_car = db.Column(db.Integer, primary_key=True)
-    correo = db.Column(db.String(250), nullable= False)
-    password = db.Column(db.String(250), nullable= True)
-    estado = db.Column(db.Integer, nullable= False)
-    primer_nombre = db.Column(db.String(250), nullable= False)
-    segundo_nombre = db.Column(db.String(250))
-    apellido_paterno = db.Column(db.String(250), nullable= False)
-    apellido_materno = db.Column(db.String(250))
-    direccion = db.Column(db.String(250), nullable= False)
-    comuna_id = db.Column(db.Integer, nullable=False)
+
+### desde aquí para abajo hay que modificar...
+
+#Creación de tabla empleado
+class empleado(db.Model):
+    __tablename__ = 'empleado'
+    id_emple = db.Column(db.Integer, primary_key=True)
+    rut_emple = db.Column(db.String(12), nullable= False)
+    nombres = db.Column(db.String(250), nullable= False)
+    apellidos = db.Column(db.String(250), nullable= False)
+    id_tipo = db.Column(db.Integer, nullable= False)
+    habilitado = db.Column(db.String(1), nullable= False)
+    num_suc = db.Column(db.Integer, nullable= False)
+    nacionalidad = db.Column(db.String(250), nullable= False)
     fono = db.Column(db.Integer, nullable= False)
+    email = db.Column(db.String(250), nullable= False)
+    clave = db.Column(db.String(250), nullable= False)
+    
 
     def __str__(self):
         return "\nid: {}. correo {}. password {}. estado {}. primer Nombre: {}. segundo Nombre: {}. apellido_paterno: {}. apellido_materno: {}. direccion: {}. comuna_id: {}. fono: {}\n".format(
@@ -117,6 +136,9 @@ class Usuario_car(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+
+
 
 #creación de tabla Region
 class Region (db.Model):
