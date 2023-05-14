@@ -4,7 +4,7 @@
 #from crypt import methods
 #import email
 #from os import access
-import os
+import base64
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
 from flask_cors import CORS, cross_origin
@@ -161,6 +161,28 @@ def get_productos():
     #opcional con imagen
     #productos = list(map(lambda producto: producto.serialize_with_image(), productos))
     return jsonify(productos), 200
+
+@cross_origin()
+@app.route('/agregar-producto', methods=['POST'])
+def agregar_producto():
+    """Ruta para agregar un producto desde formulario"""
+    data = request.values
+    img = request.files['imagen']
+    producto = Producto()
+    producto.marca = data['marca']
+    producto.cod_producto = producto.marca+'-'+data['codigo']
+    producto.serie_producto = data['serie']
+    producto.nombre = producto.marca+'-'+producto.serie
+    producto.descripcion = data['descripcion']
+    producto.precio = data['precio']
+    producto.stock = data['stock']
+    producto.precio_dolar = data['precio_dolar']
+    producto.id_categoria = data['categoria_id']
+    producto.imagen = base64.b64encode(img.read())
+    producto.save()
+    return jsonify(producto.serialize()), 201
+    #return jsonify(producto.serialize_with_image()), 201
+    
 
 
 
