@@ -17,7 +17,7 @@ class Usuario(db.Model):
     fono = db.Column(db.Integer, nullable= True)
     email = db.Column(db.String(250), nullable= False)
     password = db.Column(db.String(250), nullable= False)
-    estado = db.Column(db.Integer, nullable= False)  #0: inactivo, 1: activo
+    estado = db.Column(db.Integer, nullable= False, default= 1)  #0: inactivo, 1: activo
     tipo = db.Column(db.Integer, nullable= False) #1: cliente, 2: Vendedor, 3: Bodeguero, 4: Contador, 5: Administrador
 
     def __str__(self):
