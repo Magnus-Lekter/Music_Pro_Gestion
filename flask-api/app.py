@@ -172,13 +172,13 @@ def agregar_producto():
     producto.marca = data['marca']
     producto.cod_producto = producto.marca+'-'+data['cod_producto']
     producto.serie_producto = data['serie_producto']
-    producto.nombre = producto.marca+'-'+producto.serie
+    producto.nombre = producto.marca+'-'+producto.serie_producto
     producto.descripcion = data['descripcion']
     producto.precio = data['precio']
     producto.stock = data['stock']
     producto.precio_dolar = data['precio_dolar']
     producto.id_categoria = data['id_categoria']
-    producto.imagen = base64.b64encode(img.read())
+    producto.imagen = base64.b64decode(img.read()) #FIXME largebinary
     producto.save()
     return jsonify(producto.serialize()), 201
     #return jsonify(producto.serialize_with_image()), 201

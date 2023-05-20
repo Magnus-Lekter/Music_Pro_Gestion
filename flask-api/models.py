@@ -126,7 +126,7 @@ class Categoria(db.Model): #Cuerdas, Percusion, Amplificadores, Varios.
 
 class Producto(db.Model):
     __tablename__ = 'producto'
-    cod_producto = db.Column(db.Integer, primary_key=True)
+    cod_producto = db.Column(db.String(250), primary_key=True)
     serie_producto = db.Column(db.String(250), nullable= False)
     marca = db.Column(db.String(250), nullable= False)
     nombre = db.Column(db.String(250), nullable= False)
@@ -209,7 +209,7 @@ class Venta(db.Model):
     fecha = db.Column(db.DateTime, nullable= False, default=datetime.now())
     total = db.Column(db.Integer, nullable= False)
     id_tipo_pago = db.Column(db.Integer, db.ForeignKey('tipo_pago.id_tipo_pago'), nullable= False)
-    id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id_usuario'), nullable= False)
+    id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.rut'), nullable= False)
 
     def __str__(self):
         return f"id_venta: {self.id_venta}, fecha: {self.fecha}, total: {self.total}, id_tipo_pago: {self.id_tipo_pago}, id_usuario: {self.id_usuario}"
