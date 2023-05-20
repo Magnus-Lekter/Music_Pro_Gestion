@@ -146,19 +146,6 @@ class Producto(db.Model):
             "serie_producto": self.serie_producto,
             "marca": self.marca,
             "nombre": self.nombre,
-            "imagen": self.imagen,
-            "descripcion": self.descripcion,
-            "precio": self.precio,
-            "precio_dolar": self.precio_dolar,
-            "stock": self.stock,
-            "id_categoria": self.id_categoria
-            }
-    def serialize_with_img(self):
-        return{
-            "cod_producto": self.cod_producto,
-            "serie_producto": self.serie_producto,
-            "marca": self.marca,
-            "nombre": self.nombre,
             "imagen": 'data:image/jpeg;base64,'+base64.b64encode(self.imagen).decode('utf-8'),
             "descripcion": self.descripcion,
             "precio": self.precio,

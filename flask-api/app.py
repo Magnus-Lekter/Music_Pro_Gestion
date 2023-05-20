@@ -180,11 +180,10 @@ def agregar_producto():
     producto.id_categoria = data['id_categoria']
     producto.imagen = img.read()
     producto.save()
-    return jsonify(producto.serialize()), 201 #FIXME: not serializable
-    #return jsonify(producto.serialize_with_image()), 201
+    return jsonify(producto.serialize()), 201
 
 @cross_origin()
-@app.route('/productos/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/productos/<id>', methods=['GET', 'PUT', 'DELETE'])
 def get_producto(id):
     """Ruta para consultar, actualizar y eliminar un producto"""
     producto = Producto.query.get(id)
@@ -192,7 +191,6 @@ def get_producto(id):
         return jsonify({"msg": "Producto no encontrado"}), 404
     if request.method == 'GET':
         return jsonify(producto.serialize()), 200
-        #return jsonify(producto.serialize_with_image()), 200
     if request.method == 'PUT':
         data = request.get_json()
         producto.marca = data['marca']
@@ -206,7 +204,6 @@ def get_producto(id):
         producto.id_categoria = data['id_categoria']
         producto.update()
         return jsonify(producto.serialize()), 200
-        #return jsonify(producto.serialize_with_image()), 200
     if request.method == 'DELETE':
         producto.delete()
         return jsonify({"msg": "Producto eliminado"}), 200
@@ -266,7 +263,6 @@ def agregar_venta():
     data = request.get_json()
     venta = Venta()
     venta.total = data['total']
-    venta.fecha = data['fecha']
     venta.id_tipo_pago = data['id_tipo_pago']
     venta.id_usuario = data['id_usuario']
     venta.save()
@@ -313,6 +309,7 @@ def agregar_detalle_venta():
     detalle_venta.valor = data['valor']
     detalle_venta.id_venta = data['id_venta']
     detalle_venta.cod_producto = data['cod_producto']
+    detalle_venta.descuento = data['descuento']
     detalle_venta.save()
     return jsonify(detalle_venta.serialize()), 201
 
@@ -331,6 +328,7 @@ def get_detalle_venta(id):
         detalle_venta.valor = data['valor']
         detalle_venta.id_venta = data['id_venta']
         detalle_venta.cod_producto = data['cod_producto']
+        detalle_venta.descuento = data['descuento']
         detalle_venta.update()
         return jsonify(detalle_venta.serialize()), 200
     if request.method == 'DELETE':
