@@ -130,7 +130,7 @@ class Producto(db.Model):
     serie_producto = db.Column(db.String(250), nullable= False)
     marca = db.Column(db.String(250), nullable= False)
     nombre = db.Column(db.String(250), nullable= False)
-    imagen = db.Column(db.String(250), nullable= False)
+    imagen = db.Column(db.LargeBinary(), nullable= False)
     descripcion = db.Column(db.String(250), nullable= False)
     precio = db.Column(db.Integer, nullable= False)
     precio_dolar = db.Column(db.Integer, nullable= False)
