@@ -14,9 +14,9 @@ from models import db, Region, Comuna, Categoria, Producto, TipoPago, Venta, Det
 # 3. instanciamos la app
 app = Flask(__name__)
 cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
-app.url_map.strict_slashes = False
-app.config['DEBUG'] = False
+#app.config['CORS_HEADERS'] = 'Content-Type'
+#app.url_map.strict_slashes = False
+app.config['DEBUG'] = True
 app.config['ENV'] = 'development'
 app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///MusicProDB.db'
