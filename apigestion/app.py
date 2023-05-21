@@ -28,7 +28,7 @@ Migrate(app, db)
 # 5. Creamos la ruta por defecto para saber si mi app esta funcionado
 # 6. ejecutamos el comando en la consola: python app.py o python3 app.py y revisamos nuestro navegador
 @cross_origin()
-@app.route('/')
+@app.route('apigestion/')
 def index():
     """Bienvenida a la API de MusicPro"""
     return 'MusicPro Api V 0.1'
