@@ -1,4 +1,4 @@
-# 0. ejecutamos pip install flask flask-sqlalchemy flask-migrate flask-cors
+# 0. ejecutamos pip install flask flask-sqlalchemy flask-migrate flask-cors psycopg2-binary
 # 1. Crear modelos
 # 2. importamos las librerias de flask
 # 8. comando para iniciar mi app flask: flask db init
@@ -19,7 +19,9 @@ cors = CORS(app)
 app.config['DEBUG'] = True
 app.config['ENV'] = 'development'
 app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///MusicProDB.db'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:musicpro1234AB@db.colafxnkypjqvelgindi.supabase.co:5432/postgres'
+
 
 db.init_app(app)
 

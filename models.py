@@ -228,7 +228,7 @@ class DetalleVenta(db.Model):
     valor = db.Column(db.Integer, nullable= False)
     descuento = db.Column(db.Integer, nullable= False)
     id_venta = db.Column(db.Integer, db.ForeignKey('venta.id_venta'), nullable= False)
-    cod_producto = db.Column(db.Integer, db.ForeignKey('producto.cod_producto'), nullable= False)
+    cod_producto = db.Column(db.String(250), db.ForeignKey('producto.cod_producto'), nullable= False)
 
     def __str__(self):
         return f"id_detalle_venta: {self.id_detalle_venta}, cantidad: {self.cantidad}, valor: {self.valor}, descuento: {self.descuento}, id_venta: {self.id_venta}, cod_producto: {self.cod_producto}"
