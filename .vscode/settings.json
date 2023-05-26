@@ -1,4 +1,0 @@
-{
-    "appService.defaultWebAppToDeploy": "undefined/subscriptions/597d1aa5-5a2c-4187-9d05-a61e1b0f1784/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/MusicProAdminAPI",
-    "appService.deploySubpath": "."
-}
