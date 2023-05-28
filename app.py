@@ -354,6 +354,7 @@ def agregar_usuario():
     """Ruta para agregar un usuario"""
     data = request.get_json()
     usuario = Usuario()
+    usuario.rut = data['rut']
     usuario.nombres = data['nombres']
     usuario.apellidos = data['apellidos']
     usuario.domicilio = data['domicilio']
