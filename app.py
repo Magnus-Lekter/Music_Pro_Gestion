@@ -20,7 +20,7 @@ app.config['DEBUG'] = True
 app.config['ENV'] = 'development'
 app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:musicpro1234AB@db.colafxnkypjqvelgindi.supabase.co:5432/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:musicpro1234AB@db.colaasdkasjkdhksahi.supabase.co:5432/postgres'
 
 
 db.init_app(app)
